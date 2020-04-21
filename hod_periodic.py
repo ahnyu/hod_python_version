@@ -12,17 +12,17 @@ nsates = 380625
 nthreads = 1
 pimax = 100.0
 nrpbins = 8
-bins = np.logspace(-1.2, 3.4, nrpbins + 1, base=2.71828)
+bins = np.logspace(-1.2, 3.4, nrpbins + 1, base=2.71828) #equally spaced in ln R between 0.3 Mpc/h and 30 Mpc/h.
 
-halofile=open('/mnt/Data/Multidark/mdhalo_z038_1000.dat','r')
-halolines=np.loadtxt(halofile,usecols=(0,3,4,5))
-satefile1=open('/mnt/Data/Multidark/sate/sate_ind_1000.dat','r')
+halofile=open('/mnt/Data/Multidark/mdhalo_z038_1000.dat','r') #1000^3 in the center of Multidark
+halolines=np.loadtxt(halofile,usecols=(0,3,4,5)) 
+satefile1=open('/mnt/Data/Multidark/sate/sate_ind_1000.dat','r') #pre build satellite catalog for the in phase purpose
 sateind=np.loadtxt(satefile1,usecols=(1,3))
 satefile2=open('/mnt/Data/Multidark/sate/sate_pos_1000.dat','r')
 satepos=np.loadtxt(satefile2,usecols=(1,2,3))
-wpdata=open('/mnt/Data/Boss/counts/wp/boss_wp_lnmw.dat','r')
+wpdata=open('/mnt/Data/Boss/counts/wp/boss_wp_lnmw.dat','r') #wp measurement from boss
 wp_obs=np.loadtxt(wpdata)
-crosscov=open('/mnt/Data/Patchy/NGC/count/wp/cov/wp_cov_lnmw.dat','r')
+crosscov=open('/mnt/Data/Patchy/NGC/count/wp/cov/wp_cov_lnmw.dat','r') #cov-matrix
 cov=np.loadtxt(crosscov)
 invcov=np.linalg.inv(cov)
 bk1=time.time()
@@ -53,7 +53,7 @@ def log_prior(theta):
      
 
 
-def log_probability(theta):
+def log_probability(theta): #main function to calculate loglike
     bk2=time.time()
     m_cut,m1,sigma,kappa,alpha=theta
     count_cent=0
@@ -94,7 +94,7 @@ def log_probability(theta):
                 z.append(satepos[int(ind_sat)+j-1][2])
     bk3=time.time()
     print('hod script completed, took {0:.1f} secs'.format(bk3-bk2))
-    wp_counts = wp(boxsize,pimax,nthreads,bins,x,y,z) 
+    wp_counts = wp(boxsize,pimax,nthreads,bins,x,y,z) #corrfunc lib to compute wp
     bk4=time.time() 
     print('wp calculation completed, took {0:.1f} secs'.format(bk4-bk3))
     print(wp_counts)
@@ -110,7 +110,7 @@ def log_probability(theta):
         return -np.inf
     return lp+-0.5*log_like
    
-with Pool() as pool:
+with Pool() as pool: #parallel mcmc
     
     initial = np.array([13.08,14.06,0.98,1.13,0.9])
     ndim = len(initial)
