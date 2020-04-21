@@ -14,7 +14,7 @@ pimax = 100.0
 nrpbins = 8
 bins = np.logspace(-1.2, 3.4, nrpbins + 1, base=2.71828) #equally spaced in ln R between 0.3 Mpc/h and 30 Mpc/h.
 
-halofile=open('/mnt/Data/Multidark/mdhalo_z038_1000.dat','r') #1000^3 in the center of Multidark
+halofile=open('/mnt/Data/Multidark/mdhalo_z038_1000.dat','r') #1000^3 subsample in the center of Multidark
 halolines=np.loadtxt(halofile,usecols=(0,3,4,5)) 
 satefile1=open('/mnt/Data/Multidark/sate/sate_ind_1000.dat','r') #pre build satellite catalog for the in phase purpose
 sateind=np.loadtxt(satefile1,usecols=(1,3))
